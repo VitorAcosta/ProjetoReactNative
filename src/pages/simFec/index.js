@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput,
-         TouchableOpacity, FlatList, StyleSheet,
-         ToastAndroid } from 'react-native';
+         TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import Toast from 'react-native-simple-toast';
 
 import { windowWidth, windowHeight } from '../Constants';
 import Fila from '../../dataStructures/filaEstaticaCircular';
@@ -13,22 +13,50 @@ const f = new Fila();
 export default class SimulacaoFce extends React.Component{
     constructor(props){
         super(props);
-        this.state = {valor: '', fila:[]};
+        this.state = {valor: '', fila:f.fila, inicioFila: 0, fimFila: 0};
         this.enfileirar = this.enfileirar.bind(this);
+        this.desenfileirar = this.desenfileirar.bind(this);
+        this.atualizaValores = this.atualizaValores.bind(this);
     }
+
+    /**
+     * Método que define os estados de todos os valores envolvidos na simulação.
+     */
+    atualizaValores(){
+        this.setState({fila: f.fila});
+        this.setState({inicioFila: f.begin});
+        this.setState({fimFila: f.end})
+    }
+
     /**
      * Método que chama o enfileirar da classe Fila, concretizando o funcionamento.
      */
     enfileirar(){
+        //Se o valor inserido pelo usuário é válido
         if(!this.state.valor == ''){
+            //Se é possível enfileirar o novo valor
             if(f.enfileira(this.state.valor)){
-                console.log(f.fila);
-                this.setState({fila: f.fila});
+                this.setState({valor: ''});
+                this.atualizaValores();
+            }
+            else{
+                Toast.showWithGravity("O sentinela foi alcançado.\nNão é possível inserir mais elementos.",
+                Toast.LONG, Toast.CENTER);
             }
         }
         else{
-            ToastAndroid.showWithGravity("Pelo menos um valor deve ser inserido no campo.",
-             ToastAndroid.LONG, ToastAndroid.CENTER);
+            Toast.showWithGravity("Pelo menos um valor deve ser inserido no campo.",
+            Toast.LONG, Toast.CENTER);
+        }
+    }
+
+    desenfileirar(){
+        if(f.desinfileira()[0]){
+            this.atualizaValores();
+        }
+        else{
+            Toast.showWithGravity("A fila não contém elementos.",
+            Toast.LONG, Toast.CENTER);
         }
     }
 
@@ -41,6 +69,7 @@ export default class SimulacaoFce extends React.Component{
                     placeholderTextColor = '#31736f'
                     style={Theme.inputUser}
                     onChangeText={text => this.setState({valor: text})}
+                    value={this.state.valor}
                     />
                     <TouchableOpacity 
                     style={Theme.btnStyle}
@@ -48,20 +77,33 @@ export default class SimulacaoFce extends React.Component{
                             <Text style={Theme.btnTextStyle}>Enfileirar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                    style={Theme.btnStyleDeQueue}>
+                    style={Theme.btnStyleDeQueue}
+                    onPress={this.desenfileirar}>
                             <Text style={Theme.btnTextStyle}>Desenfileirar</Text>
                     </TouchableOpacity>
                 </View>
-                <FlatList
-                data={this.state.fila}
+                <View style={Theme.infoContainer}>
+                    <Text style={{fontSize: RFValue(18)}}>Início da Fila:</Text>
+                    <Text 
+                    style={{fontSize: RFValue(18), fontWeight: 'bold'}}
+                    >{this.state.inicioFila}</Text>
+                    <Text style={{fontSize: RFValue(18)}}>Final da Fila:</Text>
+                    <Text 
+                    style={{fontSize: RFValue(18), fontWeight: 'bold'}}
+                    >{this.state.fimFila}</Text>
+                </View>
+                <ScrollView
                 horizontal
-                style={{height: windowHeight*.3}}
-                renderItem={({item}) => 
-                    <Elemento index={this.state.fila.indexOf(item)}>{item}</Elemento>}
-                    keyExtractor={item => item}
-                >
-
-                </FlatList>
+                style={{padding: 10, height: windowHeight*.5}}>
+                    {
+                        //Renderiza toda a fila.
+                        this.state.fila.map( (valores, index) => {
+                            return(
+                                <Elemento key={index} indexElemento={index}>{valores}</Elemento>
+                            )
+                        })
+                    }
+                </ScrollView>
             </View>
         )
     }
@@ -110,6 +152,11 @@ const Theme = StyleSheet.create(
         borderBottomColor: '#31736f',
         width: windowWidth*.5,
         color: '#31736f'
+    },
+    infoContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: windowWidth*.06
     }
 }
 );
