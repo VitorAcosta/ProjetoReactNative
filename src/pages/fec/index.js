@@ -12,7 +12,9 @@ export default class Fec extends React.Component{
                 <View style={Theme.mainContainer}>
                     <Text style={Theme.title}>Fila Estática Circular</Text>
                     <Text style={Theme.description}></Text>
-                    <TouchableOpacity style={Theme.btnStyle}>
+                    <TouchableOpacity 
+                    style={Theme.btnStyle}
+                    onPress={() => this.props.navigation.navigate('simFce')}>
                         <Text style={Theme.btnTextStyle}>Simular</Text>
                     </TouchableOpacity>
                 </View>

@@ -1,11 +1,13 @@
 import React, {useRef} from 'react';
 import {RFValue} from 'react-native-responsive-fontsize';
 import { View, Text, ScrollView,
-         StyleSheet, ImageBackground,
+         StyleSheet, Image,
          Animated, TouchableOpacity } from 'react-native';
 
 import {windowWidth, windowHeight} from '../Constants'
 import logo from '../../../assets/logo.png';
+import lddePic from '../../../assets/LDDE.png';
+import filaPic from '../../../assets/FILA.png';
 
 const cardInfo = [
   {
@@ -14,6 +16,7 @@ const cardInfo = [
     subtitle: 'Projeto: Estruturas de Dados e Mobile',
     text: 'O projeto visa apresentar e simular o funcionamento de diversas estruturas de dados.\n\n'
     +'Descubra mais, arraste para o lado!',
+    image: logo,
     btnOn: false,
     textBtn: ''
   },
@@ -22,6 +25,7 @@ const cardInfo = [
     title: 'LDDE',
     subtitle: 'Lista Dinâmica Duplamente Encadeada',
     text: 'Um tipo de lista encadeada na qual cada nó, além de armazenar o valor, armazena dois "links".',
+    image: lddePic,
     btnOn: true,
     textBtn: 'Descubra mais',
     toScreen: 'ldde'
@@ -31,6 +35,7 @@ const cardInfo = [
     title: 'Fila Estática Circular',
     subtitle: '',
     text: 'Uma fila na qual o último item está conectado ao primeiro, mantendo um círculo.',
+    image: filaPic,
     btnOn: true,
     textBtn: 'Descubra mais',
     toScreen: 'fce'
@@ -65,7 +70,7 @@ export default function Home({navigation}){
           cardInfo.map( (values, index) => {
           return(
             <View style={Theme.cardStructure} key={values.id}>
-              <ImageBackground source={logo} style={Theme.image}/>  
+              <Image source={values.image} style={Theme.image}/>  
               <View style={Theme.headerStyle}>
                 <Text style={Theme.cardTitle}>{values.title}</Text>
                 <Text style={Theme.cardSubtitle}>{values.subtitle}</Text>
@@ -139,8 +144,7 @@ const Theme = StyleSheet.create(
     image: {
       width: windowWidth*.90,
       height: windowHeight*.30,
-      borderTopLeftRadius: 22,
-      resizeMode: 'cover',
+      resizeMode: 'center',
       padding: 20,
       opacity: 0.9
     },
@@ -157,7 +161,7 @@ const Theme = StyleSheet.create(
       //Style
       fontSize: RFValue(26),
       fontWeight: 'bold',
-      color: '#095e60',
+      color: '#FFF',
       textShadowColor: 'rgba(0, 0, 0, 0.35)',
       textShadowOffset: {width: -1, height: 1},
       textShadowRadius: 5
@@ -165,7 +169,8 @@ const Theme = StyleSheet.create(
     cardSubtitle:{
       //Style
       fontSize: RFValue(20),
-      color: '#234848'
+      fontWeight: 'bold',
+      color: '#FFF'
     },
     paragraph:{
       //Style

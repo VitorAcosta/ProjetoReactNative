@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './pages/home';
 import Ldde from './pages/ldde';
 import Fce from './pages/fec';
+import SimulacaoFce from './pages/simFec';
 
 //Configurador para o navegador de páginas.
 const Stack = createStackNavigator();
@@ -13,17 +14,16 @@ const Stack = createStackNavigator();
 export default function Routes(){
     return(
         //NavigationContainer garante a correta estruturação da navegação entre as páginas.
-        /**
-         * No <Stack.navigator> podemos utilizar, na opção screenOptions, o headerShown=false que
-         * desabilita a barra entre as telas. 
-         */
         <NavigationContainer>
             <Stack.Navigator>
+
+                {/** Tela inicial da aplicação */ }
                 <Stack.Screen options={{
                     headerShown:false
                 }}                    
                     name ="home" component={Home}/>
 
+                {/** Tela sobre a documentação de LDDE */ }
                 <Stack.Screen options={{
                         headerStyle:{
                             backgroundColor: '#cde8d9',
@@ -35,6 +35,7 @@ export default function Routes(){
                     }}
                     name ="ldde" component={Ldde}/>
 
+                {/** Tela sobre a documentação da Fila Estática Circular */ }
                 <Stack.Screen options={{
                         headerStyle:{
                             backgroundColor: '#cde8d9',
@@ -45,6 +46,18 @@ export default function Routes(){
                         title: ''
                     }}
                     name ="fce" component={Fce}/>
+
+                {/** Tela da simulação sobre Fila Estatica Circular */ }
+                <Stack.Screen options={{
+                        headerStyle:{
+                            backgroundColor: '#cde8d9',
+                            elevation: 0,
+                            shadowOpacity: 0
+                        },
+                        headerTintColor: '#0c5053',
+                        title: 'Simulação Fila Estática Circular'
+                    }}
+                    name ="simFce" component={SimulacaoFce}/>
             </Stack.Navigator>                 
         </NavigationContainer>
     );
