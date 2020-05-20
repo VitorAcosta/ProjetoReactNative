@@ -3,14 +3,20 @@ export default class Fila{
         this.fila = [];
         this.begin = 0;
         this.end = 0;
-        this.tamanho = 10; //Max+1
+        this.tamanho = 8; 
+        //Inicialização do vetor.
+        for(let i=0; i < this.tamanho; i++){
+            this.fila[i] = " ";
+        }
     }
 
     enfileira(numero){
         if((this.end+1)%(this.tamanho) === this.begin){
             return false;
         }
+        
         this.fila[this.end] = numero;
+        this.imprime();
 
         this.end = (this.end+1) % (this.tamanho);
         
@@ -22,6 +28,7 @@ export default class Fila{
             return [false, this.fila[0]];
         }
         let temp = this.fila[this.begin];
+        this.fila[this.begin] = " ";
         this.begin = (this.begin + 1) % (this.tamanho);
         return [true,temp];
     }

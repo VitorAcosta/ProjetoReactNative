@@ -12,7 +12,8 @@ export default class Ldde extends React.Component{
                 <View style={Theme.mainContainer}>
                     <Text style={Theme.title}>LDDE</Text>
                     <Text style={Theme.description}>Lista Dinâmica Duplamente Encadeada</Text>
-                    <TouchableOpacity style={Theme.btnStyle}>
+                    <TouchableOpacity style={Theme.btnStyle}
+                    onPress={() => this.props.navigation.navigate('simLdde')}>
                         <Text style={Theme.btnTextStyle}>Simular</Text>
                     </TouchableOpacity>
                 </View>

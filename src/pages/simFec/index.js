@@ -17,15 +17,18 @@ export default class SimulacaoFce extends React.Component{
         this.enfileirar = this.enfileirar.bind(this);
         this.desenfileirar = this.desenfileirar.bind(this);
         this.atualizaValores = this.atualizaValores.bind(this);
+        this.busca = this.busca.bind(this);
     }
 
     /**
      * Método que define os estados de todos os valores envolvidos na simulação.
      */
     atualizaValores(){
-        this.setState({fila: f.fila});
-        this.setState({inicioFila: f.begin});
-        this.setState({fimFila: f.end})
+        this.setState({
+            fila: f.fila,
+            inicioFila: f.begin,
+            fimFila: f.end
+        });
     }
 
     /**
@@ -71,6 +74,7 @@ export default class SimulacaoFce extends React.Component{
                     onChangeText={text => this.setState({valor: text})}
                     value={this.state.valor}
                     />
+
                     <TouchableOpacity 
                     style={Theme.btnStyle}
                     onPress={this.enfileirar}>
@@ -80,6 +84,14 @@ export default class SimulacaoFce extends React.Component{
                     style={Theme.btnStyleDeQueue}
                     onPress={this.desenfileirar}>
                             <Text style={Theme.btnTextStyle}>Desenfileirar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    style={[Theme.btnStyle,
+                    {
+                    marginBottom: windowHeight*.01,
+                    marginLeft: windowWidth*.20}]}
+                    onPress={this.busca}>
+                            <Text style={Theme.btnTextStyle}>Buscar</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={Theme.infoContainer}>

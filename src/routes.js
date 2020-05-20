@@ -7,6 +7,7 @@ import Home from './pages/home';
 import Ldde from './pages/ldde';
 import Fce from './pages/fec';
 import SimulacaoFce from './pages/simFec';
+import SimLDDE from './pages/simLDDE';
 
 //Configurador para o navegador de páginas.
 const Stack = createStackNavigator();
@@ -34,6 +35,18 @@ export default function Routes(){
                         title: ''
                     }}
                     name ="ldde" component={Ldde}/>
+                
+                {/** Tela de simulação da LDDE */}
+                <Stack.Screen options={{
+                        headerStyle:{
+                            backgroundColor: '#cde8d9',
+                            elevation: 0,
+                            shadowOpacity: 0
+                        },
+                        headerTintColor: '#0c5053',
+                        title: 'Simulação LDDE'
+                    }}
+                    name ="simLdde" component={SimLDDE}/>
 
                 {/** Tela sobre a documentação da Fila Estática Circular */ }
                 <Stack.Screen options={{
