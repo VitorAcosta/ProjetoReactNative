@@ -22,7 +22,12 @@ export default class LDDE{
     let noAnterior = null;
     let noAtual = this.primeiro;
 
-    while(noAtual != null && noAtual.valor < valor){
+    /**
+     * Foi notado um bug no javascript onde décimos, se comparado com unidades retornaria
+     * no 'noAtual.valor < valor' o resultado FALSE. Ao invés de transformar os dados somente para Int ou Float,
+     * decidiu-se realizar a comparação de outra maneira, igualmente eficiente.
+     */
+    while(noAtual != null && (noAtual.valor - valor) < 0){
       noAnterior = noAtual;
       noAtual = noAtual.proximo;
     }
@@ -35,7 +40,11 @@ export default class LDDE{
       this.primeiro = novoNo;
     }
 
-    (noAtual)? noAtual.anterior = novoNo : this.ultimo = novoNo;
+    if(noAtual){
+      noAtual.anterior = novoNo}
+    else{
+      this.ultimo = novoNo;
+    }
 
     novoNo.proximo = noAtual;
     this.n++;
@@ -54,6 +63,7 @@ export default class LDDE{
   remove(valor){
     let atual = this.primeiro;
     let anterior = null;
+
     for(let i=0; i < this.n && atual.valor != valor; i++) {
         anterior = atual;
         atual = atual.proximo;
@@ -81,7 +91,7 @@ export default class LDDE{
 
   imprime(){
     let temp = this.primeiro;
-    for(let i = 0; i < this.n; i++){
+    for(var i = 0; i < this.n; i++){
       console.log(temp.valor);
       temp = temp.proximo;
     }
@@ -90,8 +100,8 @@ export default class LDDE{
 
   transformaArray(){
     let temp = this.primeiro;
-    let array = [];
-    for(let i = 0; i < this.n; i++){
+    var array = [];
+    for(var i = 0; i < this.n; i++){
       array.push([(temp.anterior)?true:false, temp.valor, (temp.proximo)?true:false]);
       temp = temp.proximo;
     }

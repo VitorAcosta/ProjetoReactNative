@@ -30,7 +30,6 @@ export default class SimLDDE extends React.Component{
 
     inputValido(){
         if(!this.state.valor == ''){
-            console.log(this.state.valor);
             /**
              * Verificação se há vírgula no número.
              * A vírgula ainda funciona, entretanto o número é truncado, tirando a precisão.
@@ -56,10 +55,10 @@ export default class SimLDDE extends React.Component{
     insereLDDE(){
         if(this.inputValido()){
             ldde.insere(this.state.valor);
-                this.setState({
-                        valor: '',
-                        lista: ldde.transformaArray()
-                    });
+            this.setState({
+                    valor: '',
+                    lista: ldde.transformaArray()
+            });
         }
     }
 
