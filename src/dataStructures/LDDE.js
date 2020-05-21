@@ -50,6 +50,7 @@ export default class LDDE{
     this.n++;
     return true;
   }
+  
   busca(valor){
         let temp = this.primeiro;
         for(let i=0; i < this.n; i++) {

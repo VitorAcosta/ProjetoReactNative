@@ -33,6 +33,22 @@ export default class Fila{
         return [true,temp];
     }
 
+    busca(valor){
+        for(var j = 0; j < this.tamanho; j++){
+          if(this.fila[j] === valor){
+            return j;
+          }
+        }
+        return -1;
+    }
+
+    limpa(){
+        for(let i=0; i < this.tamanho; i++){
+            this.fila[i] = " ";
+        }
+        this.begin = this.end;
+    }
+
     imprime(){
         for(var i = this.begin; i != this.end; i=(i + 1) % (this.tamanho)){
             console.log(this.fila[i]);
