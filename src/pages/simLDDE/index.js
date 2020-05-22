@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet,
          TouchableOpacity, TextInput,
-         ScrollView, ImageBackground } from 'react-native';
+         ScrollView, ImageBackground, Image } from 'react-native';
 
 import { RFValue } from 'react-native-responsive-fontsize';
 import Toast from 'react-native-simple-toast';
@@ -16,16 +16,28 @@ import ESF from '../../../assets/elementoSemFilhos.png';
 import ESE from '../../../assets/elementoSemFilhoEsq.png';
 import ESD from '../../../assets/elementoSemFilhoDir.png';
 import EG from '../../../assets/elementoGeral.png';
+import Seta from '../../../assets/arrow.png';
 
 const ldde = new LDDE();
 
 export default class SimLDDE extends React.Component{
     constructor(props){
         super(props);
-        this.state = {valor: '', lista: []};
+        this.state = {valor: '', lista: [], apontador: null};
+        this.atualizaValores = this.atualizaValores.bind(this);
         this.insereLDDE = this.insereLDDE.bind(this);
         this.removeLDDE = this.removeLDDE.bind(this);
         this.inputValido = this.inputValido.bind(this);
+        this.busca = this.busca.bind(this);
+        this.limpa = this.limpa.bind(this);
+    }
+
+    atualizaValores(){
+        this.setState({
+            valor: '',
+            lista: ldde.transformaArray(),
+            apontador: null
+        });
     }
 
     inputValido(){
@@ -50,31 +62,30 @@ export default class SimLDDE extends React.Component{
     }
 
     /**
-     * Método que insere, por meio da classe LDDE.js, o valor digitado pelo usuário na lista.
+    * Métodos principais:
+    * Utilizando a instância da classe LDDE, os dados inseridos pelo usuário são enviados para a classe.
+    * 
+    *     insereLDDE() -> é possível enviar os dados inseridos pelo usuário para a inserção
+    *                     (ou não) na LDDE.
+    *     removeLDDE() -> retira itens da lista.
+    *     buscar() -> Busca o número inserido pelo usuário e retorna sucesso ou falha.
+    *     limpa() -> remove todos os elementos e refaz apontamentos.
      */
     insereLDDE(){
         if(this.inputValido()){
             ldde.insere(this.state.valor);
-            this.setState({
-                    valor: '',
-                    lista: ldde.transformaArray()
-            });
+            this.atualizaValores();
         }
     }
-
-    /**
-     * Método que remove, por meio da classe LDDE.js, o valor digitado pelo usuário na lista.
-     */
+    
     removeLDDE(){
         if(this.inputValido()){
             let response = ldde.remove(this.state.valor);
             if(response[0]){
                 Toast.showWithGravity(response[1],
                 Toast.LONG, Toast.CENTER);
-                this.setState({
-                    valor: '',
-                    lista: ldde.transformaArray()
-                });
+                this.atualizaValores();
+                
             }else{
                 Toast.showWithGravity(response[1],
                     Toast.LONG, Toast.CENTER);
@@ -82,32 +93,80 @@ export default class SimLDDE extends React.Component{
         }
     }
 
+    busca(){
+        if(this.inputValido()){
+            let retornoBusca = ldde.busca(this.state.valor);
+            if(retornoBusca >= 0){
+                Toast.showWithGravity("Valor encontrado no index: " + retornoBusca,
+                Toast.LONG, Toast.BOTTOM);
+                    this._scrollView.scrollTo({
+                      x: retornoBusca * (windowWidth*.5)
+                    });
+                    this.setState({apontador: retornoBusca});
+            }
+            else{
+                Toast.showWithGravity("O valor não foi encontrado",
+                Toast.LONG, Toast.CENTER);
+                this.setState({apontador: null});
+            }
+        }
+    }
+    
+    limpa(){
+        ldde.limpa();
+        this.atualizaValores();
+    }
+
     render(){
         return(
             <View>
-                <View style={Theme.mainContainer}>
+               <View style={Theme.mainContainer}>
                     <TextInput
                     placeholder = 'Insira o elemento'
                     placeholderTextColor = '#31736f'
-                    keyboardType='numeric'
+                    keyboardType = 'number-pad'
                     style={Theme.inputUser}
                     onChangeText={text => this.setState({valor: text})}
                     value={this.state.valor}
                     />
-                    <TouchableOpacity 
-                    style={Theme.btnStyle}
-                    onPress={this.insereLDDE}>
+                    
+                    <View
+                    style={{
+                        marginTop: windowHeight*.03, justifyContent: 'center',
+                        flexDirection: 'row'}}>
+                        <TouchableOpacity 
+                        style={Theme.btnStyle}
+                        onPress={this.insereLDDE}>
                             <Text style={Theme.btnTextStyle}>Inserir</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                    style={Theme.btnStyleRemove}
-                    onPress={this.removeLDDE}>
-                            <Text style={Theme.btnTextStyle}>Remover</Text>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    
+                        <TouchableOpacity 
+                        style={Theme.btnStyle}
+                        onPress={this.removeLDDE}>
+                                <Text style={Theme.btnTextStyle}>Remover</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View
+                    style={{
+                        marginTop: windowHeight*.03, justifyContent: 'center',
+                        flexDirection: 'row'}}>
+                        <TouchableOpacity 
+                        style={Theme.btnStyle}
+                        onPress={this.busca}>
+                                <Text style={Theme.btnTextStyle}>Buscar</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                        style={Theme.btnStyle}
+                        onPress={this.limpa}>
+                                <Text style={Theme.btnTextStyle}>Reset</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={Theme.tamanhoLista}>Tamanho da lista: {this.state.lista.length}</Text>
                 </View>
-                <Text style={Theme.tamanhoLista}>Tamanho da lista: {this.state.lista.length}</Text>
                 <ScrollView
                 style={Theme.scrollViewStyle}
+                ref={view => this._scrollView = view}
                 horizontal>
                     {
                         this.state.lista.map( (item, index) => {
@@ -125,10 +184,14 @@ export default class SimLDDE extends React.Component{
                                 x = EG;
                             }
                             return(
-                                <View key={index} style={Theme.container}>
-                                    <ImageBackground source={x} style={Theme.image}>
-                                        <Text style={Theme.txtStyle}>{item[1]}</Text>
-                                    </ImageBackground>
+                                <View key={index}>
+                                    <View style={Theme.container}>
+                                            <ImageBackground source={x} style={Theme.image}>
+                                                <Text style={Theme.txtStyle}>{item[1]}</Text>
+                                            </ImageBackground>
+                                    </View>
+                                    {(this.state.apontador === index)?
+                                            <Image source={Seta} style={Theme.imageArrow}/>:null}
                                 </View>
                             )
                         })
@@ -144,7 +207,7 @@ const Theme = StyleSheet.create(
     mainContainer:{
         //Style
         width: windowWidth,
-        height: windowHeight*.21,
+        height: windowHeight*.31,
         backgroundColor: '#cde8d9',
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30
@@ -154,20 +217,8 @@ const Theme = StyleSheet.create(
         alignItems: 'center',
         //Style
         backgroundColor: '#31736f',
-        width: windowWidth*.3,
-        marginTop: -windowHeight*.06,
-        marginLeft: windowWidth*.60,
-        borderRadius: 20,
-        padding: 10
-    },
-    btnStyleRemove:{
-        //Flex
-        alignItems: 'center',
-        //Style
-        backgroundColor: '#31736f',
-        width: windowWidth*.3,
-        marginTop: windowHeight*.02,
-        marginLeft: windowWidth*.60,
+        width: windowWidth*.4,
+        marginLeft: windowWidth*.02,
         borderRadius: 20,
         padding: 10
     },
@@ -176,11 +227,12 @@ const Theme = StyleSheet.create(
         color: '#FFF'
     },
     inputUser:{
+        textAlign: 'center',
         fontSize: RFValue(20),
         marginLeft: windowWidth*.05,
         borderBottomWidth: 2,
         borderBottomColor: '#31736f',
-        width: windowWidth*.5,
+        width: windowWidth*.9,
         color: '#31736f'
     },
     infoContainer:{
@@ -195,15 +247,17 @@ const Theme = StyleSheet.create(
     },
     tamanhoLista:{
         alignSelf:'center',
-        fontSize: RFValue(18)
+        fontSize: RFValue(18),
+        letterSpacing: 1
     },
     image:{
         flex: 1,
         resizeMode: 'center'
     },
     txtStyle:{
+        alignSelf: 'center',
         position: 'relative',
-        marginLeft: windowWidth*.14,
+        marginRight: windowWidth*.16,
         marginTop: windowHeight*.02,
         fontSize: RFValue(24),
         color: '#FFF',
@@ -211,7 +265,14 @@ const Theme = StyleSheet.create(
     },
     scrollViewStyle:{
         padding: 10,
-        marginTop: windowHeight*.1
+        marginTop: windowHeight*.02,
+        height: windowHeight*.25
+    },
+    imageArrow:{
+        marginTop: windowHeight*.01,
+        width: windowWidth*.13,
+        height: windowHeight*.09,
+        marginLeft: windowWidth*.1
     }
 }
 );

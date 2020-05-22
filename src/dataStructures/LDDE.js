@@ -55,10 +55,10 @@ export default class LDDE{
         let temp = this.primeiro;
         for(let i=0; i < this.n; i++) {
             if (temp.valor == valor)
-                return [true,i];
+                return i;
             temp = temp.proximo;
         }
-        return [false,-1];
+        return -1;
   }
 
   remove(valor){
@@ -88,6 +88,15 @@ export default class LDDE{
     }
     this.n--;
     return [true,'Valor removido com sucesso'];
+  }
+
+  limpa(){
+    let temp = this.primeiro;
+    while(temp != null){
+      let prox = temp.proximo;
+      this.remove(temp.valor);
+      temp = prox;
+    }
   }
 
   imprime(){
