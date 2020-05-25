@@ -16,7 +16,6 @@ export default class Fila{
         }
         
         this.fila[this.end] = numero;
-        this.imprime();
 
         this.end = (this.end+1) % (this.tamanho);
         

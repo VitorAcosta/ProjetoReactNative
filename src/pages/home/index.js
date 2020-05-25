@@ -4,43 +4,9 @@ import { View, Text, ScrollView,
          StyleSheet, Image,
          Animated, TouchableOpacity } from 'react-native';
 
-import {windowWidth, windowHeight} from '../Constants'
-import logo from '../../../assets/logo.png';
-import lddePic from '../../../assets/LDDE.png';
-import filaPic from '../../../assets/FILA.png';
+import {windowWidth, windowHeight, cardInfo} from '../Constants';
 
-const cardInfo = [
-  {
-    id: '1',
-    title: 'Bem-vindo!',
-    subtitle: 'Projeto: Estruturas de Dados e Mobile',
-    text: 'O projeto visa apresentar e simular o funcionamento de diversas estruturas de dados.\n\n'
-    +'Descubra mais, arraste para o lado!',
-    image: logo,
-    btnOn: false,
-    textBtn: ''
-  },
-  {
-    id: '2',
-    title: 'LDDE',
-    subtitle: 'Lista Dinâmica Duplamente Encadeada',
-    text: 'Um tipo de lista encadeada na qual cada nó, além de armazenar o valor, armazena dois "links".',
-    image: lddePic,
-    btnOn: true,
-    textBtn: 'Descubra mais',
-    toScreen: 'ldde'
-  },
-  {
-    id:'3',
-    title: 'Fila Estática Circular',
-    subtitle: '',
-    text: 'Uma fila na qual o último item está conectado ao primeiro, mantendo um círculo.',
-    image: filaPic,
-    btnOn: true,
-    textBtn: 'Descubra mais',
-    toScreen: 'fce'
-  } 
-];
+
 export default function Home({navigation}){
   const scrollX = useRef(new Animated.Value(0)).current;
 

@@ -3,7 +3,9 @@ import { View, Text, ScrollView,
          StyleSheet, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import {windowHeight,windowWidth} from '../Constants';
+import InfoContainer from '../../../components/InfoContainer';
+import {windowHeight,windowWidth, dataLDDE} from '../Constants';
+
 
 export default class Ldde extends React.Component{
     render(){
@@ -17,15 +19,19 @@ export default class Ldde extends React.Component{
                         <Text style={Theme.btnTextStyle}>Simular</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={Theme.information}>
-                    <Text style={Theme.paragraph}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Proin et est felis. Curabitur ultricies erat a massa imperdiet,
-                    a consequat ante dignissim. Nullam non laoreet lorem.
-                    Praesent consectetur, lorem id feugiat ultrices, arcu justo porta mi,
-                    auctor mattis dui ex vitae tortor. Mauris quis faucibus neque,
-                    nec blandit justo.
-                    </Text>
+                <ScrollView style={{marginBottom: windowHeight*.22}}>
+                    {dataLDDE.map( (values, index) => {
+                        return(
+                            <InfoContainer
+                                key = {index}
+                                tituloSecao = {values.title}
+                                conteudoSecao = {values.content}
+                                complexidade = {values.extraContent}
+                                pseudoExists = {values.pseudoExists}
+                                pseudo = {values.pseudocode}                                
+                            />
+                        )
+                    })}
                 </ScrollView>
             </View>
         )
@@ -70,18 +76,6 @@ const Theme = StyleSheet.create(
         btnTextStyle:{
             fontSize: RFValue(18),
             color: '#FFF'
-        },
-        information:{
-            marginTop: windowHeight*.05
-        },
-        paragraph:{
-            fontSize: RFValue(16),
-            color:'#051c08',
-            fontWeight: 'bold',
-            letterSpacing: 1,
-            textAlign: 'justify',
-            paddingLeft: windowWidth*.05,
-            paddingRight: windowWidth*.05
         }
     }
 );
