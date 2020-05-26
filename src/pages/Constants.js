@@ -53,6 +53,7 @@ export const dataFEC = [
         'Isso é suas operações seguem o princípio FIFO (First In First Out),'+
         'ou seja, obedece a ordem de chegada e o primeiro valor a ser inserido na fila,'+
         'será também o primeiro a sair.\n\n',
+        pseudoExists: false,
         pseudocode:''
     },
     {
@@ -60,7 +61,7 @@ export const dataFEC = [
         extraContent: '➥ Tempo: O(1)\n',
         content: 'A inserção de valores na fila sempre será feita no último índice possível, representado'+
         ' no pseudocódigo como a variável "fimFila".\n\n',
-        
+        pseudoExists: true,
         pseudocode: 'função enfileira: logico\n\n'+
         '\tvar numero: inteiro\n'+
         '\tinicio\n\n'+
@@ -76,9 +77,10 @@ export const dataFEC = [
         title: 'Método de remoção (desenfileirar)',
         extraContent: '➥ Tempo: O(1)\n',
         content: ' A remoção de valores da fila, sempre será realizada a partir do primeiro elemento da estrutura,'+
-        ' representado no pseudocódigo como a variável "inicioFila".\n\n'+
-        'função desinfileira: logico,inteiro\n\n',
-        pseudocode: '\tvar temp: inteiro\n'+
+        ' representado no pseudocódigo como a variável "inicioFila".\n\n',
+        pseudoExists: true,
+        pseudocode: 'função desinfileira: logico,inteiro\n\n'+
+        '\tvar temp: inteiro\n'+
         '\tinicio\n\n'+
         '\tse inicioFila = fimFila então\n'+
         '\t\tdesinfileira ← FALSO,-1\n\n'+
@@ -93,6 +95,7 @@ export const dataFEC = [
         content: 'A função busca tem como objetivo verificar se o valor inserido pelo usuário pertence ao vetor.'+
         ' A verificação é feita percorrendo todo o vetor, de ponta a ponta, '+
         'e comparando se cada valor é igual ao inserido pelo usuário.\n\n',
+        pseudoExists: true,
         pseudocode:'função busca: inteiro\n\n'+
         '\tvar j: inteiro\n'+
         '\tinicio\n\n'+

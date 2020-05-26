@@ -28,6 +28,7 @@ export default class Fec extends React.Component{
                                 tituloSecao = {values.title}
                                 conteudoSecao = {values.content}
                                 complexidade = {values.extraContent}
+                                pseudoExists = {values.pseudoExists}
                                 pseudo = {values.pseudocode}
                             />
                         )
